@@ -14,7 +14,7 @@ while start == 0:
     for event in pygame.event.get():
         if event.type == MOUSEBUTTONUP and event.button == 1:
             if 0 <= event.pos[0] < 450 and 535<= event.pos[1] <= 720 :
-                 start += 1
+                 start += 1 # je devais faire une action pour lancer le programme, enleves le start +=1 quand tu utiliseras le code
                  # lancer le jeu, avec la fonction de ton choix, je penses main non ?
 
             if 666 <= event.pos[0] < 1100 and 0 <= event.pos[1] <= 140 :
