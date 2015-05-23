@@ -1,0 +1,21 @@
+import pygame
+from pygame.locals import *
+pygame.init()
+start = 0
+
+
+fenetre = pygame.display.set_mode((1100, 720))
+pygame.display.set_caption("Only Way Out")
+background = pygame.image.load('image accueil png.png').convert()
+
+while start == 0:
+    fenetre.blit(background, (0, 0))
+    pygame.display.flip()
+    for event in pygame.event.get():
+        if event.type == MOUSEBUTTONUP and event.button == 1:
+            if 0 <= event.pos[0] < 450 and 535<= event.pos[1] <= 720 :
+                 start += 1
+                 # lancer le jeu, avec la fonction de ton choix, je penses main non ?
+
+            if 666 <= event.pos[0] < 1100 and 0 <= event.pos[1] <= 140 :
+                pygame.quit()
