@@ -4,6 +4,9 @@ pygame.init()
 
 
 def affichage_fenetre():
+    """
+    Fonction qui initialise toutes les images du jeux.
+    """
 
     fenetre = pygame.display.set_mode((1100, 720))
     pygame.display.set_caption("Only Way Out")
@@ -18,7 +21,7 @@ def affichage_fenetre():
     image_fin_mur = pygame.image.load('fin_mur.png')
     image_fin_eau = pygame.image.load('fin_noyade.png')
     image_fin_projectile = pygame.image.load('fin_projectile.png')
-    victoire = pygame.image.load('victoire.png')
+    victoire = pygame.image.load('victoire.jpg')
 
 
     X = 145
@@ -28,25 +31,40 @@ def affichage_fenetre():
     return jeep, X, Y, fenetre, obus_1, obus_2, obus_3, obus_4, image_fin_mur, image_fin_eau, image_fin_projectile, victoire, background
     
 def moveup(jeep, Y, fenetre):
+    """
+    Fonction qui s'occupe de déplacer la jeep vers le haut.
+    """
     Y -= 10
     return Y
 
 def movedown(jeep, Y, fenetre):
-    Y += 10
-    return Y
+     """
+     Fonction qui s'occupe de déplacer la jeep vers le bas.
+     """
+     Y += 10
+     return Y
 
 
 def moveleft(jeep, X, fenetre):
+    """
+    Fonction qui s'occupe de déplacer la jeep vers la gauche.
+    """
     X -= 10
     return X
 
 
 def moveright(jeep, X, fenetre):
+    """
+    Fonction qui s'occupe de déplacer la jeep vers la droite.
+    """
     X += 10
     return X
 
 
-def tir_bas():
+def tir_bas(temps):
+    """
+    Fonction qui s'occupe des tirs des obus vers le bas.
+    """
     obus_position_bas = [[108, 609], [321,611], [205,548], [118,412],
                               [71,375], [531,341], [746,532], [335,78],
                               [497,503], [161,377], [245,378], 
@@ -54,11 +72,17 @@ def tir_bas():
                               [257,54]]    
     copie_liste_bas = list(obus_position_bas)
     for b in range (len(obus_position_bas)):
-        copie_liste_bas[b][1] += 5  
+        copie_liste_bas[b][1] += 10 
         fenetre.blit(obus_1,(copie_liste_bas[b]))
+        if temps % 50 == 0:
+            break    
+    del copie_liste_bas         # Ici on efface la variable.
 
 
-def tir_haut():
+def tir_haut(temps):
+    """
+    Fonction qui s'occupe des tirs des obus vers le haut.
+    """
     obus_position_haut = [[30,710], [203,686], [205,528], [174,474],
                                [232,475], [93,455], [90,266], [152,275], 
                                 [322,408], [447,441], [608,440], [666,412], 
@@ -68,13 +92,19 @@ def tir_haut():
                                 [145,80], [59,84], [266,705], [449,703], 
                                 [531,705], [779,422], [737,283], [382,305], 
                                 [208,280], [508,61]]
-    copie_liste_haut = list(obus_position_haut)
+    copie_liste_haut = list(obus_position_haut)  
     for h in range (len(obus_position_haut)):
-        copie_liste_haut[h][1] += 5
+        copie_liste_haut[h][1] += 10
         fenetre.blit(obus_2,(copie_liste_haut[h]))
+        if temps % 50 == 0:
+            break    
+    del copie_liste_haut
 
 
-def tir_gauche():
+def tir_gauche(temps):
+    """
+    Fonction qui s'occupe des tirs des obus vers la gauche.
+    """
     obus_position_gauche = [[367,654], [320,439], [427,536], 
                                 [596,585], [425,341], [952,562], [930,455], 
                                 [654,200], [415,150], [155,165], [974,420], 
@@ -82,13 +112,19 @@ def tir_gauche():
                                 [647,25], [222,616], [717,536], [494,460],
                                 [572,412], [974,232], [905,135], [971,85], 
                                 [976,18], [1085,123], [1085,150], [1085,181]]
-    copie_liste_gauche = list(obus_position_gauche)
+    copie_liste_gauche = list(obus_position_gauche) 
     for g in range (len(obus_position_gauche)):
-        copie_liste_gauche[g][0] += 5
+        copie_liste_gauche[g][0] += 10
         fenetre.blit(obus_3,(copie_liste_gauche[g]))
+        if temps % 50 == 0:
+            break    
+    del copie_liste_gauche
 
 
-def tir_droit():
+def tir_droit(temps):
+    """
+    Fonction qui s'occupe des tirs des obus vers la droite.
+    """
     obus_position_droit = [[23,654], [99,664], [253,310], [562,509],
                                 [505,446], [832,343], [754,205],
                                 [345,206], [928,358], [26,609], [408,652],
@@ -97,14 +133,21 @@ def tir_droit():
                                 [662,89], [61,23]]
     copie_liste_droit = list(obus_position_droit)
     for d in range (len(obus_position_droit)):
-        copie_liste_droit[d][0] += 5
+        copie_liste_droit[d][0] += 10
         fenetre.blit(obus_4,(copie_liste_droit[d]))
+        if temps % 50 == 0:
+            break
+    del copie_liste_droit           # Ici on efface la variable.
 
 
 
 def mouvement(jeep, X, Y, fenetre, background):
+    """
+    Fonction qui gère tous les mouvements du programme.
+    """
 
     while True:
+        
         for event in pygame.event.get():
             if event.type == KEYDOWN:
                 if (event.key == pygame.K_UP):
@@ -123,10 +166,13 @@ def mouvement(jeep, X, Y, fenetre, background):
         fenetre.blit(background,(0, 0))
         fenetre.blit(jeep, (X, Y))
         pygame.display.flip()
-        tir_bas()
-        tir_droit()
-        tir_gauche()
-        tir_haut()
+
+        temps = pygame.time.get_ticks()
+        tir_bas(temps)
+        tir_droit(temps)
+        tir_gauche(temps)
+        tir_haut(temps)
+       
         pygame.display.flip()
 
 
