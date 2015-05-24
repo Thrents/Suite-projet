@@ -2,6 +2,8 @@ import pygame
 from pygame.locals import *
 pygame.init()
 
+# affichage de la fenetre et récupération des images
+
 fenetre = pygame.display.set_mode((1100, 720))
 pygame.display.set_caption("Only Way Out")
 background = pygame.image.load('image-jeux.png').convert()
@@ -18,13 +20,15 @@ image_fin_eau = pygame.image.load('fin_noyade.png')
 image_fin_projectile = pygame.image.load('fin_projectile.png')
 victoire = pygame.image.load('victoire.png')
 
-
+# positions de la jeep et du fond à ajouter par dessus
 X = 145
 Y = 560
 x_fond = X -1100
 y_fond = Y - 720
     
-   
+
+# fonctions permettant de bouger la jeep
+
 def moveup(jeep, Y, fenetre):
     """
     Fonction qui s'occupe de déplacer la jeep vers le haut.
@@ -160,6 +164,7 @@ def mouvement(jeep, X, Y, fenetre, background):
         y_fond = Y - 720
 
 
+        # affichage des images
         
         fenetre.blit(background,(0, 0))
         fenetre.blit(jeep, (X, Y))
