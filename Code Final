@@ -4,16 +4,19 @@ pygame.init()
 
 
 def affichage_fenetre():
-
+    """
+    Fonction qui charge et retourne toutes les images nécessaires.
+    """
     fenetre = pygame.display.set_mode((1100, 720))
     pygame.display.set_caption("Only Way Out")
     background = pygame.image.load('image-jeux.png').convert()
     jeep = pygame.image.load('jeep.png').convert()
+    fond_noir = pygame.image.load('fond.png')
 
-    obus_1 = pygame.image.load('obus_1.png').convert()
-    obus_2 = pygame.image.load('obus_2.png').convert()
-    obus_3 = pygame.image.load('obus_3.png').convert()
-    obus_4 = pygame.image.load('obus_4.png').convert()
+    obus_1 = pygame.image.load('obus_1.png')
+    obus_2 = pygame.image.load('obus_2.png')
+    obus_3 = pygame.image.load('obus_3.png')
+    obus_4 = pygame.image.load('obus_4.png')
 
     image_fin_mur = pygame.image.load('fin_mur.png')
     image_fin_eau = pygame.image.load('fin_noyade.png')
@@ -23,12 +26,18 @@ def affichage_fenetre():
 
     X = 145
     Y = 560
-    
+    x_fond = X -1100
+    y_fond = Y - 720    
 
-    return jeep, X, Y, fenetre, obus_1, obus_2, obus_3, obus_4, image_fin_mur, image_fin_eau, image_fin_projectile, victoire, background
+    return jeep, x_fond, y_fond, X, Y, fenetre, obus_1, obus_2, obus_3, obus_4, image_fin_mur, image_fin_eau, image_fin_projectile, victoire, background
 
 
 def affichage_fin():
+    """
+    Fonction qui affiche une image de défaite lorsque l'on est touché par
+    un projectile.
+    """
+    
     pygame.blit(image_fin_projectile(0,0))
     for event in pygame.event.get():
         if event.type == KEYDOWN:
@@ -36,26 +45,32 @@ def affichage_fin():
                 pygame.quit()
 
 
-def moveup(jeep, Y, fenetre):
+def moveup(y_fond, jeep, Y, fenetre):
     Y -= 10
-    return Y
+    y_fond = Y - 1100
+    return Y, y_fond
 
-def movedown(jeep, Y, fenetre):
+def movedown(y_fond, jeep, Y, fenetre):
     Y += 10
-    return Y
+    return Y, y_fond
 
 
-def moveleft(jeep, X, fenetre):
+def moveleft(x_fond, jeep, X, fenetre):
     X -= 10
-    return X
+    x_fond = X - 720
+    return X, x_fond
 
 
-def moveright(jeep, X, fenetre):
+def moveright(x_fond, jeep, X, fenetre):
     X += 10
-    return X
+    x_fond = X - 720
+    return X, x_fond
 
 
 def tir_bas(fenetre, obus_1, X, Y):
+    """
+    Fonction qui gère les tirs vers le bas.
+    """
     obus_position_bas = [[108, 609], [321,611], [205,548], [118,412],
                               [71,375], [531,341], [746,532], [335,78],
                               [497,503], [161,377], [245,378], 
@@ -63,13 +78,16 @@ def tir_bas(fenetre, obus_1, X, Y):
                               [257,54]]    
     copie_liste_bas = list(obus_position_bas)
     for b in range (len(obus_position_bas)):
-        copie_liste_bas[b][1] += 5  
+        copie_liste_bas[b][1] += 5  # On fait une copie de la liste.
         fenetre.blit(obus_1,(copie_liste_bas[b]))
         if copie_liste_bas[b] == (X, Y): # On vérifie si l'obus touche la jeep.
             affichage_fin()
 
 
 def tir_haut(fenetre, obus_2, X, Y):
+    """
+    Fonction qui gère les tirs vers le haut.
+    """
     obus_position_haut = [[30,710], [203,686], [205,528], [174,474],
                                [232,475], [93,455], [90,266], [152,275], 
                                 [322,408], [447,441], [608,440], [666,412], 
@@ -88,6 +106,9 @@ def tir_haut(fenetre, obus_2, X, Y):
 
 
 def tir_gauche(fenetre, obus_3, X, Y):
+    """
+    Fonction qui gère les tirs vers la gauche.
+    """
     obus_position_gauche = [[367,654], [320,439], [427,536], 
                                 [596,585], [425,341], [952,562], [930,455], 
                                 [654,200], [415,150], [155,165], [974,420], 
@@ -104,6 +125,9 @@ def tir_gauche(fenetre, obus_3, X, Y):
 
 
 def tir_droit(fenetre, obus_4, X, Y):
+    """
+    Fonction qui gère les tirs vers la droite.
+    """
     obus_position_droit = [[23,654], [99,664], [253,310], [562,509],
                                 [505,446], [832,343], [754,205],
                                 [345,206], [928,358], [26,609], [408,652],
@@ -119,33 +143,38 @@ def tir_droit(fenetre, obus_4, X, Y):
 
 
 
-def mouvement(jeep, X, Y, fenetre, background, obus_1, obus_2, obus_3, obus_4):
+def mouvement(x_fond, y_fond, jeep, X, Y, fenetre, background, obus_1, obus_2, obus_3, obus_4):
+    """
+    Fonction qui s'occupe de tous les mouvements ou l'événement pour quitter le
+    jeu.
+    """
 
 
     for event in pygame.event.get():
         if event.type == KEYDOWN:
             if (event.key == pygame.K_UP):
-                Y = moveup(jeep, Y, fenetre)
+                Y, y_fond = moveup(y_fond, jeep, Y, fenetre)
             if (event.key == pygame.K_DOWN):
-                Y = movedown(jeep, Y, fenetre)
+                Y, y_fond = movedown(y_fond, jeep, Y, fenetre)
             if (event.key == pygame.K_RIGHT):
-                X = moveright(jeep, X, fenetre)
+                X, x_fond = moveright(x_fond, jeep, X, fenetre)
             if (event.key == pygame.K_LEFT):
-                X = moveleft(jeep, X, fenetre)
+                X, x_fond = moveleft(x_fond, jeep, X, fenetre)
             if (event.key == pygame.K_ESCAPE):
-                pygame.quit() # On quitte le programme.
+                pygame.quit()   # On quitte le programme.
 
 
         
     fenetre.blit(background,(0, 0))
+    fenetre.blit(fond_noir, (x_fond, y_fond ))
     fenetre.blit(jeep, (X, Y))
     pygame.display.flip()
+    
     tir_bas(fenetre, obus_1, X, Y)
     tir_droit(fenetre, obus_4, X, Y)
     tir_gauche(fenetre, obus_3, X, Y)
     tir_haut(fenetre, obus_2, X, Y)
     pygame.display.flip()
-
 
 
 def delimitation(X, Y):
@@ -171,6 +200,7 @@ def delimitation(X, Y):
         affichage_fin_mur()
         
         # zones interdites ( murs + le trou d'eau )
+    
     if 31 <= X <= 73 and 256 <= Y <= 285:
         affichage_fin_mur()
       
@@ -267,9 +297,9 @@ def main():
     """
     Fonction principale du jeu.
     """
-    jeep, X, Y, fenetre, obus_1, obus_2, obus_3, obus_4, image_fin_mur, image_fin_eau, image_fin_projectile, victoire, background = affichage_fenetre()    
+    jeep, x_fond, y_fond, X, Y, fenetre, obus_1, obus_2, obus_3, obus_4, image_fin_mur, image_fin_eau, image_fin_projectile, victoire, background = affichage_fenetre()    
     while True:
-        mouvement(jeep,X, Y, fenetre, background, obus_1, obus_2, obus_3, obus_4)
+        mouvement(x_fond, y_fond, jeep,X, Y, fenetre, background, obus_1, obus_2, obus_3, obus_4)
         affichage_fin_mur()
         delimitation(X, Y)
 
